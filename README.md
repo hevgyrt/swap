@@ -1,2 +1,2 @@
 # swap
-spectral wave dissipation formulations in Python
+Spectral WAve dissipation Parametrizations implemeted in Python
