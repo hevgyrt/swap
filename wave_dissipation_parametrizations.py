@@ -258,11 +258,6 @@ class S_ds():
 
 
 
-
-
-
-
-
 def fully_developed_pm(U10,f):
     """ Compute the theoretical fully developed wind sea Pierson-Moskowitz
     spectrum
@@ -460,12 +455,6 @@ def main():
     E_jw = JONSWAP(f,1/T_peak,U10)
     E_don = donelan(f,fp,cp,U10,implemented_type="rogers")
 
-    plt.plot(f,E_don,label='Don')
-    plt.plot(f,E_jw)
-    plt.plot(f, E_pm)
-    plt.legend()
-    plt.show()
-
 
 
     m0_jw = np.sum(E_jw)*df
@@ -473,20 +462,33 @@ def main():
     print("Hm0_pm = {}, Hm0_jw = {}\n".format(round(Hm0_pm,3),round(Hm0_jw,3)))
 
     d = 50
-    Sds = S_ds(f,E_jw,d, deepwater=True)
+    Sds_jw = S_ds(f,E_jw,d, deepwater=True)
+    S_wc_west_jw = Sds_jw.westhuyjsen_2007()
+    S_wc_kom_jw = Sds_jw.komen_1984(n=0.5,C_wc = 4.10e-5)
+    S_wc_rog_jw = -Sds_jw.rogers_2012(a1=2e-4, a2=1.6e-3, L=1, M=1, E_generic_type='var',
+                                                    f1_idx=1)
 
-    S_wc_west = Sds.westhuyjsen_2007()
-    S_wc_kom = Sds.komen_1984(n=0.5,C_wc = 4.10e-5)
-
-
+    # Plotting
     font_size=15
-    fig, ax = plt.subplots()
-    ax.plot(f,S_wc_west,label='westhuyjsen_2007')
-    ax.plot(f,S_wc_kom,label='komen_1984')
-    ax.set_xlabel('Frequency [Hz]', fontsize=font_size)
-    ax.set_ylabel('S_wc [m**2]', fontsize=font_size)
-    ax.legend()
-    ax.grid()
+    fig, ax = plt.subplots(nrows=2, sharex=True, figsize=(10,8))
+
+    ax[0].plot(f,E_don,c='tab:blue',label='Donelan')
+    ax[0].plot(f,E_jw,c='tab:orange',label='Jonswap')
+    ax[0].plot(f, E_pm,c='tab:green',label='Pierson Moskowitz')
+    ax[0].set_ylabel(r'$H_{s} [m]$', fontsize=font_size)
+
+
+    ax[1].plot(f,S_wc_west_jw,c='tab:orange',ls='--',label='westhuyjsen_2007')
+    ax[1].plot(f,S_wc_kom_jw,c='tab:orange',ls='-',label='komen_1984')
+    ax[1].plot(f,S_wc_rog_jw,c='tab:orange',ls=':',label='Rogers 2012')
+
+    ax[1].set_xlabel('Frequency [Hz]', fontsize=font_size)
+    ax[1].set_ylabel(r'$S_{wc} [m^2]$', fontsize=font_size)
+
+    for aax in ax:
+        aax.legend()
+        aax.grid()
+
     plt.show()
 
 if __name__=='__main__':
