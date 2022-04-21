@@ -24,9 +24,9 @@ class S_ds():
             C_wc: white capping coefficient
 
             NOTE: Standard WAM Cyckle III formulations for n and C_wc are
-            implemented as default. For WAM Cyckle IV, it is
-                C_wc = 4.10e-5 for WAM Cycle IV
-                n    = 0.5 for WAM Cyckle IV
+            implemented as default. For WAM Cycle IV, it is
+                C_wc = 4.10e-5
+                n    = 0.5
         Returns:
             S_wc in frequency form
         """
@@ -111,10 +111,11 @@ class S_ds():
         return S_wc_f
 
     def westhuyjsen_2012(self):
+        print('Not implemented')
         return 0
 
     def rogers_2012(self, a1, a2, L, M, E_generic_type, f1_idx, return_T1_T2=False, return_delta_f=False):
-        """ implemented from Rogers (2012)
+        """ implemented from Rogers et al. (2012)
 
         Args:
             a1, a2, L, M: parameters (see Table 1 in Rogers (2012))
@@ -229,6 +230,14 @@ class S_ds():
         NOTE: Only implemented unidirectional for deepwater
 
         Args:
+            a1: parameter (see Table 1 in Rogers (2012))
+            E_generic: Normalization/generic spectral density
+            L: parameter (see Table 1 in Rogers (2012))
+            a2: parameter (see Table 1 in Rogers (2012))
+            f1_idx: frequency idx where breaking starts
+            M: parameter (see Table 1 in Rogers (2012))
+            a3: parameter (see Rapizo (2016))
+            U: U in the wave direction given Us=Ux*cos(theta) + Uy*sin(theta)
 
         Returns:
             S_ds in frequency form
@@ -259,10 +268,9 @@ class S_ds():
 
 
 
-
-
 def main():
     import matplotlib.pyplot as plt
+    from idealized_spectrums import donelan, fully_developed_pm, JONSWAP
     g = 9.81
     f = np.ma.masked_array(np.linspace(0.00001,1,501))
     df = f[1]-f[0]

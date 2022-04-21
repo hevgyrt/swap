@@ -43,8 +43,8 @@ def test_rogers2012_ex1():
     hm0_ex2 = 4*np.sqrt(np.sum(E_don[1])*df)
 
     fig, ax = plt.subplots()
-    ax.plot(f/fp[0],E_don[0]*f**4,label=r'$U/c_p$={}, $H_s$={}, $f_p$={}'.format(np.round(U10/cp[0],2),np.round(hm0_ex1,2),np.round(fp[0],2)))
-    ax.plot(f/fp[1],E_don[1]*f**4,label=r'$U/c_p$={}, $H_s$={}, $f_p$={}'.format(np.round(U10/cp[1],2),np.round(hm0_ex2,2),np.round(fp[1],2)))
+    ax.plot(f/fp[0],E_don[0]*f**4,label=r'$U/c_p$={}, $H_s$={}, $f_p$={}'.format(np.round(U10/cp[0],2),np.round(hm0_ex1,2),np.round(fp[0],2)),c='b',lw=2)
+    ax.plot(f/fp[1],E_don[1]*f**4,label=r'$U/c_p$={}, $H_s$={}, $f_p$={}'.format(np.round(U10/cp[1],2),np.round(hm0_ex2,2),np.round(fp[1],2)),c='g',lw=2)
 
     ax.set_xlim([0,8])
     ax.set_xlabel(r'$f/f_p$')
@@ -52,6 +52,7 @@ def test_rogers2012_ex1():
     ax.set_ylabel(r'$E(f) f^4$')
     ax.grid()
     ax.legend()
+    ax.set_title('Compare with Figure 4 in Rogers et al. 2012')
     plt.show()
 
     Sds_s = [S_ds(f,E_don[i],d, deepwater=True) for i in range(len(cp))]
@@ -73,6 +74,11 @@ def test_rogers2012_ex1():
 
             ax[0,j].plot(f/fp[j],Sds_rog, label='S_ds {}'.format(i))
 
+            if i == 0 and j ==0:
+                assert np.nanmax(Sds_rog) == pytest.approx(3.3e-4, 1e-1)
+            elif i == 0 and j ==3:
+                assert np.nanmax(Sds_rog) == pytest.approx(1.5e-4, 1e-1)
+
     ax[0,0].set_ylim([0,4e-4])
     ax[1,0].set_ylim([0,4e-4])
 
@@ -83,4 +89,13 @@ def test_rogers2012_ex1():
         aax.set_xlim([0,6])
         aax.legend()
         aax.grid()
+
+    ax[0,0].set_title(r'$U/c_p$={}, $H_s$={}, $f_p$={}'.format(np.round(U10/cp[0],2),np.round(hm0_ex1,2),np.round(fp[0],2)))
+    ax[0,1].set_title(r'$U/c_p$={}, $H_s$={}, $f_p$={}'.format(np.round(U10/cp[1],2),np.round(hm0_ex2,2),np.round(fp[1],2)))
+
+    fig.suptitle('Compare with Figure 6 in Rogers et al. 2012', fontsize=16)
+
+
+
+
     plt.show()
